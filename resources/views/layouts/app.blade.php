@@ -9,8 +9,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+  
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +17,14 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .btn-info{
+            color: #fff;
+        }
+    </style>
+     @yield('css')
+
+
 </head>
 <body>
     <div id="app">
@@ -55,12 +62,18 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+
+                                <a class="dropdown-item" href="{{ route('users.edit-profile') }}"
+                                       >
+                                        My profile
+                                    </a>
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-
+                                    
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -88,15 +101,36 @@
 
             @endif
 
+            @if(session()->has('error'))
+            <div class="alert alert-danger">
+                {{ session()->get('error') }}
+            </div>
+
+            @endif
+
 
                <div class="row">
             <div class="col-md-4">
                 <ul class="list-group">
+                @if(auth()->user()->isAdmin())
+                <li class="list-group-item">
+                <a href=" {{route('users.index')}} ">Users</a>
+                </li>
+                @endif
                     <li class="list-group-item">
                         <a href="{{ route('posts.index') }}">Posts</a>
                     </li>
                     <li class="list-group-item">
                         <a href="{{ route('categories.index') }}">Categories</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('tags.index') }}">Tags</a>
+                    </li>
+                    
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item my-5">
+                        <a href="{{ route('trashed-posts.index') }}">Trush Posts</a>
                     </li>
                 </ul>
 
@@ -127,9 +161,8 @@
     </div>
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"  crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
 
 @yield('scripts')
 
